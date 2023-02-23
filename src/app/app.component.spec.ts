@@ -28,6 +28,6 @@ describe('AppComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
       compiled.querySelector('[data-test=logo-screen-reader]')?.textContent
-    ).toContain('priorIT EDV Dienstleistungen GmbH');
+    ).toContain('Angular Testing');
   });
 });
