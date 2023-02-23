@@ -6,6 +6,7 @@ import { DemoForm } from './demo-form.model';
 })
 export class NamePipe implements PipeTransform {
   transform(value: DemoForm, ...args: unknown[]): string {
+    if (!value) return 'No name given';
     let name = '';
     if (value.firstname) name += value.firstname;
     if (value.lastname) name += ' ' + value.lastname;

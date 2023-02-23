@@ -6,6 +6,8 @@ import { DemoForm } from './demo-form.model';
 })
 export class AddressPipe implements PipeTransform {
   transform(value: DemoForm, ...args: unknown[]): string {
+    if (!value) return 'No address given';
+
     let address = '';
 
     if (value.street) address += value.street;
