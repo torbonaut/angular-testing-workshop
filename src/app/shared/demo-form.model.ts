@@ -7,4 +7,5 @@ export class DemoForm {
   public city: string = '';
   public region: string = '';
   public zip: string = '';
+  public hash: string = '';
 }

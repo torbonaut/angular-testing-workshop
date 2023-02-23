@@ -1,12 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DemoForm } from './demo-form.model';
 
 @Pipe({
-  name: 'name'
+  name: 'name',
 })
 export class NamePipe implements PipeTransform {
-
-  transform(value: unknown, ...args: unknown[]): unknown {
-    return null;
+  transform(value: DemoForm, ...args: unknown[]): string {
+    let name = '';
+    if (value.firstname) name += value.firstname;
+    if (value.lastname) name += ' ' + value.lastname;
+    if (!name) return 'No name given';
+    return name;
   }
-
 }

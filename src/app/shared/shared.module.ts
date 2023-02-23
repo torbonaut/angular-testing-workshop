@@ -4,12 +4,8 @@ import { AddressPipe } from './address.pipe';
 import { NamePipe } from './name.pipe';
 
 @NgModule({
-  declarations: [
-    AddressPipe,
-    NamePipe
-  ],
-  imports: [
-    CommonModule
-  ]
+  declarations: [AddressPipe, NamePipe],
+  imports: [CommonModule],
+  exports: [AddressPipe, NamePipe],
 })
-export class SharedModule { }
+export class SharedModule {}
