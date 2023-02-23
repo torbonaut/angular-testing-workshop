@@ -5,11 +5,11 @@ import { PageFormComponent } from './components/page-form/page-form.component';
 import { FormsModule } from '@angular/forms';
 import { PageResultComponent } from './components/page-result/page-result.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { CountriesService } from './countries.service';
+import { CountriesUsingObservablesService } from './countries-using-observables.service';
 
 @NgModule({
   declarations: [PageFormComponent, PageResultComponent],
   imports: [CommonModule, SharedModule, DemoFormRoutingModule, FormsModule],
-  providers: [CountriesService],
+  providers: [CountriesUsingObservablesService],
 })
 export class DemoFormModule {}

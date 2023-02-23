@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { DemoForm } from '../../../../shared/demo-form.model';
 import { CountryName } from '../../countries.model';
-import { CountriesService } from '../../countries.service';
+import { CountriesUsingObservablesService } from '../../countries-using-observables.service';
 
 @Component({
   selector: 'app-page-form',
@@ -26,7 +26,7 @@ export class PageFormComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private readonly router: Router,
-    private readonly country: CountriesService
+    private readonly country: CountriesUsingObservablesService
   ) {
     this.countries$ = this.country.getCountries();
     this.generateHash();

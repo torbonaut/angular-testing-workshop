@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { CountryName } from '../../countries.model';
-import { CountriesService } from '../../countries.service';
+import { CountriesUsingObservablesService } from '../../countries-using-observables.service';
 
 import { PageFormComponent } from './page-form.component';
 
@@ -25,7 +25,10 @@ describe('PageFormComponent', () => {
       declarations: [PageFormComponent],
       imports: [FormsModule],
       providers: [
-        { provide: CountriesService, useClass: MockCountriesService },
+        {
+          provide: CountriesUsingObservablesService,
+          useClass: MockCountriesService,
+        },
       ],
     }).compileComponents();
 

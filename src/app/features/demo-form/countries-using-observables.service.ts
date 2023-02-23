@@ -4,7 +4,7 @@ import { map, Observable } from 'rxjs';
 import { Country, CountryName } from './countries.model';
 
 @Injectable({ providedIn: 'root' })
-export class CountriesService {
+export class CountriesUsingObservablesService {
   constructor(private readonly http: HttpClient) {}
 
   public getCountries(): Observable<CountryName[]> {
