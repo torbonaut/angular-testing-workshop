@@ -53,14 +53,14 @@ export class PageFormComponent implements AfterViewInit, OnDestroy {
   generateHash(): void {
     let hash = '';
 
-    hash += this.model.firstname ? this.model.firstname.charAt(0) : '!';
-    hash += this.model.lastname ? this.model.lastname.charAt(1) : '"';
-    hash += this.model.email ? this.model.email.charAt(2) : '§';
-    hash += this.model.street ? this.model.street.charAt(3) : '$';
-    hash += this.model.zip ? this.model.zip.toString().charAt(0) : '%';
-    hash += this.model.city ? this.model.city.charAt(3) : '/';
-    hash += this.model.region ? this.model.region.charAt(2) : '(';
-    hash += this.model.country ? this.model.country.charAt(0) : ')';
+    hash += this.model.firstname ? this.model.firstname.charAt(0) : 'A';
+    hash += this.model.lastname ? this.model.lastname.charAt(1) : 'B';
+    hash += this.model.email ? this.model.email.charAt(2) : 'C';
+    hash += this.model.street ? this.model.street.charAt(3) : 'D';
+    hash += this.model.zip ? this.model.zip.toString().charAt(0) : 'E';
+    hash += this.model.city ? this.model.city.charAt(3) : 'F';
+    hash += this.model.region ? this.model.region.charAt(2) : 'G';
+    hash += this.model.country ? this.model.country.charAt(0) : 'H';
 
     this.model.hash = hash;
   }

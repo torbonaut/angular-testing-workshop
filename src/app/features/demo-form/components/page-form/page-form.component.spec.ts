@@ -10,8 +10,9 @@ import { Router } from '@angular/router';
 describe('PageFormComponent', () => {
   let component: PageFormComponent;
   let fixture: ComponentFixture<PageFormComponent>;
-  let router: Router;
   let countriesServiceStub: Partial<CountriesUsingObservablesService>;
+
+  const mockRouter = { navigate: jest.fn() };
 
   beforeEach(async () => {
     countriesServiceStub = {
@@ -22,13 +23,13 @@ describe('PageFormComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [PageFormComponent],
-      imports: [
-        RouterTestingModule,
-        FormsModule,
-        ReactiveFormsModule,
-      ],
+      imports: [FormsModule, ReactiveFormsModule],
       providers: [
-        { provide: CountriesUsingObservablesService, useValue: countriesServiceStub },
+        {
+          provide: CountriesUsingObservablesService,
+          useValue: countriesServiceStub,
+        },
+        { provide: Router, useValue: mockRouter },
       ],
     }).compileComponents();
   });
@@ -37,7 +38,6 @@ describe('PageFormComponent', () => {
     fixture = TestBed.createComponent(PageFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    router = TestBed.inject(Router);
   });
 
   afterEach(() => {
@@ -70,7 +70,7 @@ describe('PageFormComponent', () => {
       component.model = new DemoForm();
       component.generateHash();
 
-      expect(component.model.hash).toEqual('!"§$%&/()');
+      expect(component.model.hash).toEqual('ABCDEFGH');
     });
 
     it('should generate a hash from partly filled form data', () => {
@@ -83,11 +83,9 @@ describe('PageFormComponent', () => {
       component.model = model;
       component.generateHash();
 
-      expect(component.model.hash).toEqual('J"h$1/)');
+      expect(component.model.hash).toEqual('JBhD1FH');
     });
-
   });
-
 
   describe('onSubmit()', () => {
     it('should generate a hash and navigate to the result page with the form data', () => {
@@ -95,15 +93,15 @@ describe('PageFormComponent', () => {
 
       component.model = model;
 
-      jest.spyOn(component, 'generateHash');
-      jest.spyOn(router, 'navigate');
+      const hashSpy = jest.spyOn(component, 'generateHash');
+      const routerSpy = jest.spyOn(mockRouter, 'navigate');
 
       component.onSubmit();
 
-      fixture.detectChanges();
-
-      expect(component.generateHash).toHaveBeenCalled();
-      expect(router.navigate).toHaveBeenCalledWith(['/demo-form/result'], { state: model });
+      expect(hashSpy).toHaveBeenCalled();
+      expect(routerSpy).toHaveBeenCalledWith(['/demo-form/result'], {
+        state: model,
+      });
     });
   });
 });
