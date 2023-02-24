@@ -5,22 +5,31 @@ import { DemoForm } from './demo-form.model';
   name: 'address',
 })
 export class AddressPipe implements PipeTransform {
-  transform(value: DemoForm, ...args: unknown[]): string {
-    if (!value) return 'No address given';
+  transform(value: DemoForm | unknown, ...args: unknown[]): string {
+    if (!value || !(value instanceof DemoForm)) return 'No address given';
 
-    let address = '';
+    let addressParts = [];
+    let zipAndCity = '';
+    let regionAndCountry = '';
 
-    if (value.street) address += value.street;
-    if (value.zip || value.city) address += ', ';
-    if (value.zip) address += value.zip + ' ';
-    if (value.city) address += value.city;
-    if (value.region || value.country) address += ', ';
-    if (value.region) address += value.region;
-    if (value.region && value.country) address += ' - ';
-    if (value.country) address += value.country;
+    if (value.street) addressParts.push(value.street);
 
-    if (!address) return 'No address given';
+    if (value.zip || value.city) {
+      zipAndCity = value.zip ? value.zip : '';
+      if(value.zip && value.city) zipAndCity += ' ';
+      zipAndCity += value.city ? value.city : '';
+      addressParts.push(zipAndCity);
+    }
 
-    return address;
+    if(value.region || value.country) {
+      regionAndCountry = value.region ? value.region : '';
+      if(value.region && value.country) regionAndCountry += ' - ';
+      regionAndCountry += value.country ? value.country : '';
+      addressParts.push(regionAndCountry);
+    }
+
+    if (!addressParts || !addressParts.length) return 'No address given';
+
+    return addressParts.join(', ');
   }
 }
