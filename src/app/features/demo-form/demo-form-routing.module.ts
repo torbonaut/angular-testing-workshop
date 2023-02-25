@@ -3,20 +3,20 @@ import { PageFormComponent } from './components/page-form/page-form.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
+export const demoFormRoutes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: PageFormComponent
+    component: PageFormComponent,
   },
   {
     path: 'result',
-    component: PageResultComponent
-  }
+    component: PageResultComponent,
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(demoFormRoutes)],
   exports: [RouterModule],
 })
-export class DemoFormRoutingModule { }
+export class DemoFormRoutingModule {}

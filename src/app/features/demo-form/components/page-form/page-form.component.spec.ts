@@ -9,17 +9,15 @@ import { Router } from '@angular/router';
 describe('PageFormComponent', () => {
   let component: PageFormComponent;
   let fixture: ComponentFixture<PageFormComponent>;
-  let countriesServiceStub: Partial<CountriesUsingObservablesService>;
 
   const mockRouter = { navigate: jest.fn() };
+  const countriesServiceStub: Partial<CountriesUsingObservablesService> = {
+    getCountries(): Observable<any> {
+      return of([{ name: 'Country1' }, { name: 'Country2' }]);
+    },
+  };
 
   beforeEach(async () => {
-    countriesServiceStub = {
-      getCountries(): Observable<any> {
-        return of([{ name: 'Country1' }, { name: 'Country2' }]);
-      },
-    };
-
     await TestBed.configureTestingModule({
       declarations: [PageFormComponent],
       imports: [FormsModule, ReactiveFormsModule],
