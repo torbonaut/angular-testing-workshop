@@ -27,8 +27,7 @@
       </svg>
       <span class="sr-only">Info</span>
       <div>
-        <span class="font-medium">Warning!</span> What the f... are you still
-        doing here? Get in to the chopper ... NOW!
+        <span class="font-medium">Warning!</span> {{ warningMessage$ | async }}
       </div>
     </div>
     <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
@@ -177,5 +176,9 @@
     >
       Hash: {{ submittedData.hash }}
     </p>
+    <app-chopper
+      *ngIf="showWarning$ | async"
+      (countdown)="countdown($event)"
+    ></app-chopper>
   </div>
 </div>

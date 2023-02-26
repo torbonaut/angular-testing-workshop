@@ -14,6 +14,10 @@ export class PageResultComponent {
 
   public showWarning$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+  public warningMessage$: BehaviorSubject<string> = new BehaviorSubject(
+    'What the f... are you still doing here? Get in to the chopper ... NOW!'
+  );
+
   constructor(private readonly router: Router) {
     const navigation = this.router.getCurrentNavigation();
     this.submittedData = navigation?.extras?.state as DemoForm;
@@ -21,5 +25,12 @@ export class PageResultComponent {
     setTimeout(() => {
       this.showWarning$.next(true);
     }, 10000);
+  }
+
+  countdown($event: number) {
+    this.warningMessage$.next('Take off in ' + $event + ' seconds ...');
+    if ($event === 0) {
+      this.router.navigate(['/home']);
+    }
   }
 }

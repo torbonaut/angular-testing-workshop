@@ -6,9 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { PageResultComponent } from './components/page-result/page-result.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CountriesUsingObservablesService } from './countries-using-observables.service';
+import { ChopperComponent } from './components/page-result/chopper/chopper.component';
 
 @NgModule({
-  declarations: [PageFormComponent, PageResultComponent],
+  declarations: [PageFormComponent, PageResultComponent, ChopperComponent],
   imports: [CommonModule, SharedModule, DemoFormRoutingModule, FormsModule],
   providers: [CountriesUsingObservablesService],
 })
