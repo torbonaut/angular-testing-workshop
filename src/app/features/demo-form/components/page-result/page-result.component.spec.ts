@@ -238,4 +238,54 @@ describe('PageResultComponent', () => {
     const hashElement = fixture.nativeElement.querySelector('[data-test=hash]');
     expect(hashElement.textContent.trim()).toBe('Hash: abc123');
   });
+
+  it('should receive the countdown event and change the warning to countdown', fakeAsync(() => {
+    fixture = TestBed.createComponent(PageResultComponent);
+    component = fixture.componentInstance;
+    // let some time pass
+    tick(11000);
+    // run change Detection, update the template
+    fixture.detectChanges();
+
+    // the warning should be shown in the template
+    const el = fixture.debugElement.nativeElement.querySelector(
+      '[data-test=warning]'
+    );
+    expect(el.textContent).toMatch(/Get in to the chopper/);
+
+    // lets mimic the countdown event
+    component.countdown(5);
+
+    // run change Detection, update the template
+    fixture.detectChanges();
+
+    // the warning should change to the countdown
+    const el2 = fixture.debugElement.nativeElement.querySelector(
+      '[data-test=warning]'
+    );
+    expect(el2.textContent).toContain('Take off in 5 seconds ...');
+  }));
+
+  it('should redirect to home after countdown has ended', fakeAsync(() => {
+    fixture = TestBed.createComponent(PageResultComponent);
+    component = fixture.componentInstance;
+
+    // let time pass, so warning is shown
+    tick(11000);
+
+    // we inject location in order to check it after the click
+    const location = TestBed.inject(Location);
+
+    // lets mimic the countdown event, when zero it should redirect
+    component.countdown(0);
+
+    // let time pass and let the router do its work
+    tick();
+
+    // we should be on home now
+    expect(location.path()).toContain('/home');
+
+    // flush all pending microtasks
+    flush();
+  }));
 });
