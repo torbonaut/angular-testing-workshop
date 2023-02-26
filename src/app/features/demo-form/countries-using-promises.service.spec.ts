@@ -10,15 +10,18 @@ describe('CountriesService', () => {
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
+    // setup the testing environment
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [CountriesUsingPromisesService],
     });
+    // inject the service and the http testing controller
     service = TestBed.inject(CountriesUsingPromisesService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
+    // verify that there are no outstanding requests
     httpTestingController.verify();
   });
 
@@ -34,14 +37,18 @@ describe('CountriesService', () => {
       { name: 'Cuba' },
     ];
 
+    // check if we got the expected sorted countries
     service.getCountries().then((countryNames) => {
       expect(countryNames).toEqual(expectedCountryNames);
     });
 
+    // check if the request was made
     const req = httpTestingController.expectOne(
       'https://restcountries.com/v3.1/all?fields=name'
     );
+    // check if the request was a GET
     expect(req.request.method).toEqual('GET');
+    // resolve the request, return the dummy countries
     req.flush(mockCountries);
   });
 });

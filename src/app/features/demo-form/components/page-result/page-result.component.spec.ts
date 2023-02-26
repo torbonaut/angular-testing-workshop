@@ -12,7 +12,7 @@ import { DemoForm } from '../../../../shared/demo-form.model';
 import { SharedModule } from '../../../../shared/shared.module';
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 
 // create a dummy component to be used in the router (setup routes)
@@ -33,7 +33,7 @@ describe('PageResultComponent', () => {
       ],
       declarations: [PageResultComponent],
     }).compileComponents();
-    // compileComponents() is only needed when templateUrls or styleUrls are used, and then async is needed
+    // compileComponents() is only needed when templateUrls or styleUrls are used, and then also async / await is needed
   });
 
   it('should create', () => {
@@ -43,7 +43,7 @@ describe('PageResultComponent', () => {
   });
 
   it('warning is shown in template after 10s', fakeAsync(() => {
-    // not in foreach, so that fakeAsync can intercept the setTimeout
+    // not in foreach, so that fakeAsync can intercept and control the setTimeout
     fixture = TestBed.createComponent(PageResultComponent);
     component = fixture.componentInstance;
 
@@ -73,23 +73,28 @@ describe('PageResultComponent', () => {
     );
     expect(el2).toBeTruthy();
 
+    // clear all micro tasks
     flush();
   }));
 
   it('warning is shown in template after 10s using jest fake timers', () => {
-    // call useFakeTimers() before creating the component!
+    // call useFakeTimers() before creating the component, so setTimeout can be intercepted and controlled!
     jest.useFakeTimers();
 
     fixture = TestBed.createComponent(PageResultComponent);
     component = fixture.componentInstance;
 
+    // let 9s pass
     jest.advanceTimersByTime(9000);
+    // update template
     fixture.detectChanges();
     const el = fixture.debugElement.nativeElement.querySelector(
       '[data-test=warning]'
     );
+    // no warning should be here
     expect(el).toBeFalsy();
 
+    // let 2 more seconds pass
     jest.advanceTimersByTime(2000);
     // update the template
     fixture.detectChanges();
@@ -97,8 +102,9 @@ describe('PageResultComponent', () => {
     const el2 = fixture.debugElement.nativeElement.querySelector(
       '[data-test=warning]'
     );
+    // after 11 seconds our template should be here
     expect(el2).toBeTruthy();
-
+    // restore real timers
     jest.useRealTimers();
   });
 
@@ -110,14 +116,15 @@ describe('PageResultComponent', () => {
     // lets spy on the behavior subject
     const showWarningSpy = jest.spyOn(component.showWarning$, 'next');
 
+    // let 9 seconds pass
     tick(9000);
     // we dont need to detect changes, we ignore the template
     expect(showWarningSpy).not.toHaveBeenCalled();
-
+    // let 2 more seconds pass
     tick(2000);
     // we dont need to detect changes, we ignore the template
     expect(showWarningSpy).toHaveBeenCalledWith(true);
-
+    // flush all pending microtasks
     flush();
   }));
 
@@ -126,16 +133,20 @@ describe('PageResultComponent', () => {
     fixture = TestBed.createComponent(PageResultComponent);
     component = fixture.componentInstance;
 
+    // in the beginning we expect the behavior subject to be false
     const warningBS1 = firstValueFrom(component.showWarning$).then((value) => {
       expect(value).toEqual(false);
     });
 
+    // flush all pending microtasks
     flush();
 
+    // after setTimout it should be true
     const warningBS2 = lastValueFrom(component.showWarning$).then((value) => {
       expect(value).toEqual(true);
     });
 
+    // flush all pending microtasks
     flush();
   }));
 
@@ -154,6 +165,7 @@ describe('PageResultComponent', () => {
     demoForm.country = 'US';
 
     component.submittedData = demoForm;
+
     // update the template
     fixture.detectChanges();
 
@@ -183,17 +195,21 @@ describe('PageResultComponent', () => {
     fixture = TestBed.createComponent(PageResultComponent);
     component = fixture.componentInstance;
 
+    // we inject location in order to check it after the click
     const location = TestBed.inject(Location);
 
     const button = fixture.nativeElement.querySelector(
       '[data-test=home-button]'
     );
+    // trigger go back home button
     button.click();
+    // let time pass
     tick();
 
+    // we should be on home now
     expect(location.path()).toContain('/home');
 
-    // clear microtasks
+    // flush all pending microtasks
     flush();
   }));
 
@@ -201,9 +217,9 @@ describe('PageResultComponent', () => {
     const demoForm = new DemoForm();
     demoForm.hash = 'abc123';
 
-    const route = TestBed.inject(ActivatedRoute);
     const router = TestBed.inject(Router);
 
+    // lets spy on the routers getCurrentNavigation method and let it return our demoForm data (route data)
     const routerSpy = jest
       .spyOn(router, 'getCurrentNavigation')
       .mockReturnValue({
@@ -214,8 +230,11 @@ describe('PageResultComponent', () => {
 
     fixture = TestBed.createComponent(PageResultComponent);
     component = fixture.componentInstance;
+
+    // run change Detection, update the template
     fixture.detectChanges();
 
+    // the hash should be shown in the template
     const hashElement = fixture.nativeElement.querySelector('[data-test=hash]');
     expect(hashElement.textContent.trim()).toBe('Hash: abc123');
   });

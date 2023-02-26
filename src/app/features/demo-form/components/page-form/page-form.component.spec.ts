@@ -10,7 +10,9 @@ describe('PageFormComponent', () => {
   let component: PageFormComponent;
   let fixture: ComponentFixture<PageFormComponent>;
 
+  // we mock the router and we will be able to check if the navigate method was called
   const mockRouter = { navigate: jest.fn() };
+  // we stub the service and we will be able to check if the getCountries method was called
   const countriesServiceStub: Partial<CountriesUsingObservablesService> = {
     getCountries(): Observable<any> {
       return of([{ name: 'Country1' }, { name: 'Country2' }]);
@@ -57,13 +59,15 @@ describe('PageFormComponent', () => {
       model.region = 'NY';
       model.country = 'US';
 
+      // set the component model with our data
       component.model = model;
+      // trigger the generateHash Method
       component.generateHash();
 
       expect(component.model.hash).toEqual('Joh 1tU');
     });
 
-    it('should generate a hash from no data', () => {
+    it('should generate a hash from no / empty data', () => {
       component.model = new DemoForm();
       component.generateHash();
 
@@ -87,10 +91,14 @@ describe('PageFormComponent', () => {
   describe('onSubmit()', () => {
     it('should generate a hash and navigate to the result page with the form data', () => {
       const model = new DemoForm();
+      model.firstname = 'John';
 
+      // set empty model
       component.model = model;
 
+      // listen to the component generateHash method
       const hashSpy = jest.spyOn(component, 'generateHash');
+      // listen to the mock router navigate method
       const routerSpy = jest.spyOn(mockRouter, 'navigate');
 
       component.onSubmit();
