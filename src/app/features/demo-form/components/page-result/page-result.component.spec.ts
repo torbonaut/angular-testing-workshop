@@ -13,6 +13,7 @@ import { SharedModule } from '../../../../shared/shared.module';
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 
 // create a dummy component to be used in the router (setup routes)
 @Component({ template: '' })
@@ -71,6 +72,8 @@ describe('PageResultComponent', () => {
       '[data-test=warning]'
     );
     expect(el2).toBeTruthy();
+
+    flush();
   }));
 
   it('warning is shown in template after 10s using jest fake timers', () => {
@@ -95,6 +98,8 @@ describe('PageResultComponent', () => {
       '[data-test=warning]'
     );
     expect(el2).toBeTruthy();
+
+    jest.useRealTimers();
   });
 
   it('check if the behavior subject is nexted after 10s', fakeAsync(() => {
@@ -112,6 +117,26 @@ describe('PageResultComponent', () => {
     tick(2000);
     // we dont need to detect changes, we ignore the template
     expect(showWarningSpy).toHaveBeenCalledWith(true);
+
+    flush();
+  }));
+
+  it('check if the value of the behavior subject is true after 10s', fakeAsync(() => {
+    // not in foreach, so that fakeAsync can intercept the setTimeout
+    fixture = TestBed.createComponent(PageResultComponent);
+    component = fixture.componentInstance;
+
+    const warningBS1 = firstValueFrom(component.showWarning$).then((value) => {
+      expect(value).toEqual(false);
+    });
+
+    flush();
+
+    const warningBS2 = lastValueFrom(component.showWarning$).then((value) => {
+      expect(value).toEqual(true);
+    });
+
+    flush();
   }));
 
   it('should show form submission result', () => {
