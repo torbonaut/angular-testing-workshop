@@ -15,3 +15,5 @@ Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The 
 - Run `npm run jest-watch` to execute the unit and integration tests via jest in watcher mode.
 - Run `npm run cypress-component` to execute cypress component tests
 - Run `npm run cypress-e2e` to execute cypress end-to-end tests
+- Run `npm run cypress-open` to open the cypress application
+

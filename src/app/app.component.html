@@ -1,4 +1,4 @@
-<div class="isolate bg-white">
+<header class="isolate bg-white">
   <div
     class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
   >
@@ -29,7 +29,7 @@
   <div class="px-6 pt-6 lg:px-8">
     <nav class="flex items-center justify-between" aria-label="Global">
       <div class="flex lg:flex-1">
-        <a href="#" class="">
+        <a routerLink="/home" class="" data-test="logo">
           <span data-test="logo-screen-reader" class="sr-only"
             >Angular Testing</span
           >
@@ -71,7 +71,7 @@
   <main>
     <router-outlet></router-outlet>
   </main>
-</div>
+</header>
 
 <footer class="bg-white">
   <div

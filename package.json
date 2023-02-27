@@ -8,8 +8,9 @@
     "watch": "ng build --watch --configuration development",
     "jest": "jest --no-cache",
     "jest-watch": "jest --no-cache --watchAll",
-    "cypress-e2e": "",
-    "cypress-component": ""
+    "cypress-e2e": "cypress run --e2e",
+    "cypress-component": "cypress run --component",
+    "cypress-open": "cypress open"
   },
   "private": true,
   "dependencies": {
