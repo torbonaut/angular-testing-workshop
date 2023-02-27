@@ -14,7 +14,8 @@ import { BehaviorSubject } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChopperComponent {
-  @Input() chopperImageId: string = 'BibxoLzkbg4';
+
+  @Input() imageId: string = 'BibxoLzkbg4';
 
   @Output() countdown: EventEmitter<number> = new EventEmitter();
 

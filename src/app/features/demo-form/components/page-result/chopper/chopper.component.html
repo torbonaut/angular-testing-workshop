@@ -1,9 +1,10 @@
 <div class="flex justify-center">
   <img
     class="h-20 rounded-full shadow-md border-slate-300 border-4 hover:border-slate-500 cursor-pointer active:border-red-500"
-    src="https://source.unsplash.com/{{ chopperImageId }}/100x100"
+    src="https://source.unsplash.com/{{ imageId }}/100x100"
     alt="Chopper"
     (click)="takeOff()"
     [class.fadeout]="countdownHasStarted$ | async"
+    data-test="chopper-image"
   />
 </div>
