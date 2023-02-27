@@ -11,7 +11,7 @@ import { PageResultComponent } from './page-result.component';
 import { DemoForm } from '../../../../shared/demo-form.model';
 import { SharedModule } from '../../../../shared/shared.module';
 import { Location } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 
@@ -32,6 +32,7 @@ describe('PageResultComponent', () => {
         SharedModule,
       ],
       declarations: [PageResultComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
     // compileComponents() is only needed when templateUrls or styleUrls are used, and then also async / await is needed
   });
