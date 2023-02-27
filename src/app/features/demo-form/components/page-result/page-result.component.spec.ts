@@ -277,14 +277,18 @@ describe('PageResultComponent', () => {
     // we inject location in order to check it after the click
     const location = TestBed.inject(Location);
 
-    // lets mimic the countdown event, when zero it should redirect
-    component.countdown(0);
+    // see https://github.com/angular/angular/issues/25837, we use the ngZone run to prevent a warningQ
+    fixture.ngZone?.run(() => {
+      // lets mimic the countdown event, when zero it should redirect
+      component.countdown(0);
 
-    // let time pass and let the router do its work
-    tick();
+      // let time pass and let the router do its work
+      tick();
 
-    // we should be on home now
-    expect(location.path()).toContain('/home');
+      // we should be on home now
+      expect(location.path()).toContain('/home');
+    });
+
 
     // flush all pending microtasks
     flush();
