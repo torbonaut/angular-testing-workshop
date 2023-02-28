@@ -11,6 +11,7 @@ import { Observable, Subscription } from 'rxjs';
 import { DemoForm } from '../../../../shared/demo-form.model';
 import { CountryName } from '../../countries.model';
 import { CountriesUsingObservablesService } from '../../countries-using-observables.service';
+import { HashService } from '../../../../shared/hash.service';
 
 @Component({
   selector: 'app-page-form',
@@ -19,23 +20,31 @@ import { CountriesUsingObservablesService } from '../../countries-using-observab
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageFormComponent implements AfterViewInit, OnDestroy {
-  public model: DemoForm = new DemoForm();
+  public _model: DemoForm = new DemoForm();
+  public get model(): DemoForm {
+    return this._model;
+  }
+  public set model(value: DemoForm) {
+    this._model = value;
+    this._model.hash= this.hash.generateHash(this.model);
+  }
   public countries$: Observable<CountryName[]>;
   private subscriptions: Subscription = new Subscription();
   @ViewChild('demoForm') private form!: FormGroup;
 
   constructor(
     private readonly router: Router,
-    private readonly country: CountriesUsingObservablesService
+    private readonly country: CountriesUsingObservablesService,
+    private readonly hash: HashService
   ) {
     this.countries$ = this.country.getCountries();
-    this.generateHash();
+    this.model.hash = this.hash.generateHash(this.model);
   }
 
   ngAfterViewInit(): void {
     this.subscriptions.add(
       this.form.valueChanges.subscribe(() => {
-        this.generateHash();
+        this.model.hash = this.hash.generateHash(this.model);
       })
     );
   }
@@ -45,23 +54,7 @@ export class PageFormComponent implements AfterViewInit, OnDestroy {
   }
 
   onSubmit(): void {
-    this.generateHash();
+    this.model.hash = this.hash.generateHash(this.model);
     this.router.navigate(['/demo-form/result'], { state: this.model });
-  }
-
-  /* some stupid useless hash function */
-  generateHash(): void {
-    let hash = '';
-
-    hash += this.model.firstname ? this.model.firstname.charAt(0) : 'A';
-    hash += this.model.lastname ? this.model.lastname.charAt(1) : 'B';
-    hash += this.model.email ? this.model.email.charAt(2) : 'C';
-    hash += this.model.street ? this.model.street.charAt(3) : 'D';
-    hash += this.model.zip ? this.model.zip.toString().charAt(0) : 'E';
-    hash += this.model.city ? this.model.city.charAt(3) : 'F';
-    hash += this.model.region ? this.model.region.charAt(2) : 'G';
-    hash += this.model.country ? this.model.country.charAt(0) : 'H';
-
-    this.model.hash = hash;
   }
 }

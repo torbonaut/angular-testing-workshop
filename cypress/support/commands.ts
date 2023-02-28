@@ -35,3 +35,48 @@
 //     }
 //   }
 // }
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      fillForm(formData: any): Chainable<void>
+    }
+  }
+}
+
+
+Cypress.Commands.add('fillForm', (formData: any) => {
+  if (formData.hasOwnProperty('firstname')) {
+    cy.get('input[name="firstname"]').type(formData.firstname);
+  }
+
+  if(formData.hasOwnProperty('lastname')) {
+    cy.get('input[name="lastname"]').type(formData.lastname);
+  }
+
+  if(formData.hasOwnProperty('email')) {
+    cy.get('input[name="email"]').type(formData.email);
+  }
+
+  if(formData.hasOwnProperty('address')) {
+    cy.get('input[name="address"]').type(formData.address);
+  }
+
+  if(formData.hasOwnProperty('country')) {
+    cy.get('select[name="country"]').select(formData.country);
+  }
+
+  if(formData.hasOwnProperty('city')) {
+    cy.get('input[name="city"]').type(formData.city);
+  }
+
+  if(formData.hasOwnProperty('zip')) {
+    cy.get('input[name="zip"]').type(formData.zip);
+  }
+
+  if(formData.hasOwnProperty('region')) {
+    cy.get('input[name="region"]').type(formData.region);
+  }
+
+  cy.get('input').first().focus() // Focus on the first input field to trigger the validation
+});

@@ -28,7 +28,7 @@ describe('PageFormComponent', () => {
           provide: CountriesUsingObservablesService,
           useValue: countriesServiceStub,
         },
-        { provide: Router, useValue: mockRouter },
+        { provide: Router, useValue: mockRouter }
       ],
     }).compileComponents();
   });
@@ -47,8 +47,8 @@ describe('PageFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('generateHash() all values', () => {
-    it('should generate a hash from the form data', () => {
+
+    it('should generate a hash from the form data and display it', () => {
       const model = new DemoForm();
       model.firstname = 'John';
       model.lastname = 'Doe';
@@ -59,54 +59,46 @@ describe('PageFormComponent', () => {
       model.region = 'NY';
       model.country = 'US';
 
-      // set the component model with our data
+      // set the component model with our data (and the setter calls the hash generation)
       component.model = model;
-      // trigger the generateHash Method
-      component.generateHash();
 
-      expect(component.model.hash).toEqual('Joh 1tU');
+      // run change detection to update the view
+      fixture.detectChanges();
+
+      // check if the hash was generated correctly
+      expect(component.model.hash).toEqual('Joh 1tYU');
+
+      // get the hash element from the DOM
+      const hashElement = fixture.nativeElement.querySelector('[data-test="hash"]');
+      // check if the hash is displayed
+      expect(hashElement.textContent).toContain('Joh 1tYU');
     });
 
-    it('should generate a hash from no / empty data', () => {
-      component.model = new DemoForm();
-      component.generateHash();
 
-      expect(component.model.hash).toEqual('ABCDEFGH');
-    });
-
-    it('should generate a hash from partly filled form data', () => {
-      const model = new DemoForm();
-      model.firstname = 'John';
-      model.email = 'johndoe@example.com';
-      model.zip = '12345';
-      model.region = 'NY';
-
-      component.model = model;
-      component.generateHash();
-
-      expect(component.model.hash).toEqual('JBhD1FH');
-    });
-  });
-
-  describe('onSubmit()', () => {
     it('should generate a hash and navigate to the result page with the form data', () => {
       const model = new DemoForm();
       model.firstname = 'John';
+      model.lastname = 'Doe';
+      model.email = 'john.doe@yolo.com';
 
-      // set empty model
+      const expectedModel = { ...model, hash: 'JohDEFGH' }
+
+      // set partly filled model
       component.model = model;
+      // run change detection to update the view
+      fixture.detectChanges();
+      // get the hash element from the DOM
+      const hashElement = fixture.nativeElement.querySelector('[data-test="hash"]');
+      // check if the hash is displayed
+      expect(hashElement.textContent).toContain('JohDEFGH');
 
-      // listen to the component generateHash method
-      const hashSpy = jest.spyOn(component, 'generateHash');
       // listen to the mock router navigate method
       const routerSpy = jest.spyOn(mockRouter, 'navigate');
 
       component.onSubmit();
 
-      expect(hashSpy).toHaveBeenCalled();
       expect(routerSpy).toHaveBeenCalledWith(['/demo-form/result'], {
         state: model,
       });
     });
   });
-});

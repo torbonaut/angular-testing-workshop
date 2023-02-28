@@ -15,15 +15,17 @@ describe('static header of all pages', () => {
     cy.viewport(1280, 720);
     // check for the links to angular, cypress, chest and tailwind
     cy.get('header nav a')
-      .contains('Angular')
-      .should('exist')
+      .contains(/^Angular$/)
+      .should('be.visible')
       .should('have.attr', 'href', 'https://angular.io/guide/testing');
-    cy.get('nav a').contains('Cypress').should('exist');
-    cy.get('nav a').contains('Jest').should('exist');
-    cy.get('nav a').contains('TailWind').should('be.visible');
+    cy.get('nav a').contains(/^Jest$/).should('be.visible').should('have.attr', 'href', 'https://jestjs.io/');
+    cy.get('nav a').contains(/^Cypress$/).should('be.visible').should('be.visible').should('have.attr', 'href', 'https://www.cypress.io/');
+    cy.get('nav a').contains("TailWind CSS").should('be.visible').should('have.attr', 'href', 'https://tailwindcss.com/');
 
     // tailwind link is hidden on smaller viewports
     cy.viewport(980, 720);
     cy.get('nav a').contains('TailWind').should('not.be.visible');
   });
 });
+
+
