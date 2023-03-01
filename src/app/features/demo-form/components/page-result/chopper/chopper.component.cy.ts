@@ -1,5 +1,6 @@
 import { ChopperComponent } from './chopper.component';
 import "cypress-real-events";
+import { createOutputSpy } from 'cypress/angular';
 
 describe('chopper component', () => {
   it('mounts', () => {
@@ -28,5 +29,39 @@ describe('chopper component', () => {
         expect(Cypress.$($img).css('border-color')).not.to.eq(hoverBorder);
       });
     });
-  })
+  });
+
+  it('should change image to given from input', () => {
+    cy.mount(ChopperComponent, {
+      componentProperties: {
+        imageId: 'ro-GJ-Hlz-s'
+      }
+    });
+
+    cy.get('img').should('have.attr', 'src', 'https://source.unsplash.com/ro-GJ-Hlz-s/100x100');
+  });
+
+  it.only('should emit countdown', () => {
+    cy.clock(); // let's use fake timers to speed up testing
+    cy.mount(ChopperComponent, {
+      componentProperties: {
+        countdown: createOutputSpy('countdownSpy')
+      }
+  });
+
+    cy.get('img').click();
+    cy.tick(1000);
+    cy.get('@countdownSpy').should('have.been.calledWith', 5);
+    cy.tick(1000);
+    cy.get('@countdownSpy').should('have.been.calledWith', 4);
+    cy.tick(1000);
+    cy.get('@countdownSpy').should('have.been.calledWith', 3);
+    cy.tick(1000);
+    cy.get('@countdownSpy').should('have.been.calledWith', 2);
+    cy.tick(1000);
+    cy.get('@countdownSpy').should('have.been.calledWith', 1);
+    cy.tick(1000);
+    cy.get('@countdownSpy').should('have.been.calledWith', 0);
+  });
+
 });
